@@ -7,10 +7,14 @@ describe("A Die", function(){
         expect(sides).toBe(6);
     });
     
-    it("should return a number between 1 and number of sides (inclusive) when cast", function(){
+    it("should signal a value between 1 and number of sides (inclusive) when cast", function(){
+	var value = undefined;
         var die = new GURPS.Die({ sides : 3 });
+	die.on("cast", function(result){
+	    value = result;
+	});
         
-        var value = die.cast();
+        die.cast();
         
         expect(value).toBeGreaterThan(0);
         expect(value).toBeLessThan(die.sides() + 1);

@@ -7,7 +7,7 @@
         },
         
         cast : function(){
-            return Math.floor((this.get("random")() * this.sides()) + 1);
+	    this.trigger("cast", Math.floor((this.get("random")() * this.sides()) + 1));
         }
     });
 
