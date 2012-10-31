@@ -25,6 +25,30 @@
 	}
     });
 
+    var DiceBuilder = function(){
+	var amount = 1;
+	var sides = 6;
+
+	this.amount = function(amount){
+	    this.amount = amount;
+	    return this;
+	};
+
+	this.sides = function(sides) {
+	    this.sides = sides;
+	    return this;
+	};
+
+	this.build = function(){
+	    var dice = new Dice();
+	    for (var index = 0; index < this.amount; index++) {
+		dice.add({ sides : this.sides });
+	    }
+	    return dice;
+	};
+    }
+
     GURPS.Die = Die;
     GURPS.Dice = Dice;
+    GURPS.DiceBuilder = DiceBuilder;
 })(jQuery, _, Backbone, GURPS);

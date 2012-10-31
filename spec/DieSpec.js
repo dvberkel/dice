@@ -49,4 +49,14 @@ describe("Dice", function(){
         expect(value).toBeGreaterThan(0);
         expect(value).toBeLessThan(sides + 1);
     });
+
+    it("should be create with a factory", function(){
+	var builder = new GURPS.DiceBuilder();
+	var dice = builder.amount(2).sides(6).build();
+
+        var value = dice.cast();
+        
+        expect(value).toBeGreaterThan(1);
+        expect(value).toBeLessThan(13);
+    });
 });
