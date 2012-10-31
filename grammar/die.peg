@@ -1,0 +1,4 @@
+start = die
+
+die = amount:number 'd' sides:number { return (new GURPS.DiceBuilder()).amount(amount).sides(sides).build(); }
+number = digits:[0-9]+ { return parseInt(digits.join(''), 10); }

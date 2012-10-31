@@ -8,12 +8,11 @@ describe("A Parser", function(){
     });
 
     it("should return a Dice object", function(){
-	var dice = GURPS.Parser.parse("2d6");
-	console.log(dice);
+    	var dice = GURPS.Parser.parse("2d6");
 
-	var value = dice.cast();
+	    var value = dice.cast();
 
-	expect(value).toBeGreaterThan(1);
-	expect(value).toBeLessThan(13);
+	    expect(value).toBeGreaterThan(1);
+	    expect(value).toBeLessThan(13);
     });
 });
