@@ -8,6 +8,7 @@
 	    var $body = $('body');
  	    new DescriptionView({ model : this.model, el : $body });
  	    new ThrowView({ model : this.model, el : $body });
+ 	    new ResultView({ model : this.model, el : $body });
 	}
     });
 
@@ -54,6 +55,34 @@
 		this._button = $button;
 	    }
 	    return this._button;
+	}
+    });
+
+    var ResultView = Backbone.View.extend({
+	initialize : function(){
+	    this.render();
+	},
+	
+	render : function(){
+	    var $span = this.span();
+	    if (this.model.isValid()) {
+		$span.show();
+		$span.text(37);
+	    } else {
+		$span.hide();
+	    }
+	},
+
+	span : function(){
+	    if (! this._span) {
+		var $span = $("<span>_</span>");
+		$span.click(function(){
+		    console.log("clicked");
+		});
+		$span.appendTo(this.$el);
+		this._span = $span;
+	    }
+	    return this._span;
 	}
     });
 
