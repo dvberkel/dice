@@ -9,7 +9,8 @@
     
     $.ajax({
         url : "grammar/die.peg",
-        success : function(data){
+	dataType: "text",
+        success : function(data, textStatus, jqXHR){
             GURPS.Parser = PEG.buildParser(data);
         },
         error : function(){
