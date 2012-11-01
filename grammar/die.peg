@@ -1,4 +1,25 @@
-start = die
+start = expression
 
-die = amount:number 'd' sides:number { return (new GURPS.DiceBuilder()).amount(amount).sides(sides).build(); }
-number = digits:[0-9]+ { return parseInt(digits.join(''), 10); }
+expression = multiplier:factor dice:dice basis:offset { return dice.multiply(multiplier).basis(basis); }
+
+factor 
+    = factor:number '*' { return factor; }
+    / empty_factor
+empty_factor = '' { return 1; }
+
+number 
+    = digits:[0-9]+ { return parseInt(digits.join(''), 10); }
+
+dice 
+    = amount:number 'd' sides:number { 
+	var dice = (new GURPS.DiceBuilder())
+	    .amount(amount)
+	    .sides(sides)
+	    .build();
+	return new GURPS.DiceValue({ dice : dice }); 
+    }
+
+offset 
+    = '+' offset:number { return offset; }
+    / empty_offset
+empty_offset = '' { return 0; }

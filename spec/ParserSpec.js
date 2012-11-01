@@ -7,12 +7,43 @@ describe("A Parser", function(){
         expect(function(){GURPS.Parser.parse("1d6")}).not.toThrow();
     });
 
-    it("should return a Dice object", function(){
+    it("should return a castleable object", function(){
     	var dice = GURPS.Parser.parse("2d6");
 
-	    var value = dice.cast();
+	var value = dice.cast();
+	
+	expect(value).toBeBetween(2,12);
+    });
 
-	    expect(value).toBeGreaterThan(1);
-	    expect(value).toBeLessThan(13);
+    it("should return a castleable object", function(){
+    	var dice = GURPS.Parser.parse("2d6");
+
+	var value = dice.cast();
+	
+	expect(value).toBeBetween(2,12);
+    });
+
+    it("should return a multiplyable option", function(){
+    	var dice = GURPS.Parser.parse("10*1d6");
+
+	var value = dice.cast();
+	
+	expect(value).toBeBetween(10,60);
+    });
+
+    it("should return a multiplyable value", function(){
+    	var dice = GURPS.Parser.parse("10*1d6");
+
+	var value = dice.cast();
+	
+	expect(value).toBeBetween(10,60);
+    });
+
+    it("should return a offsetable value", function(){
+    	var dice = GURPS.Parser.parse("1d6+3");
+
+	var value = dice.cast();
+	
+	expect(value).toBeBetween(4,10);
     });
 });
