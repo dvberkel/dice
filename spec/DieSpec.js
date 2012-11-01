@@ -12,8 +12,7 @@ describe("A Die", function(){
 
         var value = die.cast();
         
-        expect(value).toBeGreaterThan(0);
-        expect(value).toBeLessThan(die.sides() + 1);
+	expect(value).toBeBetween(1, 3);
     });
     
     it("should signal a value between 1 and number of sides (inclusive) when cast", function(){
@@ -24,48 +23,65 @@ describe("A Die", function(){
 	});
         
         die.cast();
-        
-        expect(value).toBeGreaterThan(0);
-        expect(value).toBeLessThan(die.sides() + 1);
-    });
-    
-    it("should be able to multiply with a given range", function(){
-        var die = (new GURPS.Die()).multiply(10);
 
-        var value = die.cast();
+        expect(value).toBeBetween(1, 3);
+    });
+});
+
+describe("Die Value", function(){
+    it("should have sensible default values", function(){
+	var dieValue = new GURPS.DieValue();
+
+	var value = dieValue.cast();
+
+        expect(value).toBeBetween(1,6);
+    });
+
+    it("should also trigger a cast", function(){
+	var value = undefined;
+        var die = new GURPS.Die({ sides : 3 });
+	die.on("cast", function(result){
+	    value = result;
+	});
         
-        expect(value).toBeGreaterThan(10 * 1 - 1);
-        expect(value).toBeLessThan(10 * die.sides() + 1);
+        die.cast();
+        
+	expect(value).toBeBetween(1,3);
+    });
+     
+    it("should be able to multiply with a given range", function(){
+        var dieValue  = (new GURPS.DieValue()).multiply(10);
+
+        var value = dieValue.cast();
+
+        expect(value).toBeBetween(10, 60);
     });
 
     it("should be able to be shifted with a basis", function(){
-        var die = (new GURPS.Die()).basis(3);
+        var dieValue = (new GURPS.DieValue()).basis(3);
 
-        var value = die.cast();
+        var value = dieValue.cast();
         
-        expect(value).toBeGreaterThan(3);
-        expect(value).toBeLessThan(die.sides() + 1 + 3);
+        expect(value).toBeBetween(3, 9);
     });
 });
 
 describe("Dice", function(){
-    it("should hold a number of die", function(){
+    it("should hold a number of die values", function(){
 	var dice = new GURPS.Dice();
 
-	dice.add(new GURPS.Die());
+	dice.add(new GURPS.DieValue());
 
 	expect(dice.size()).toBe(1);
     });
 
     it("should be able to be cast", function(){
-	var sides = 6
 	var dice = new GURPS.Dice();
-	dice.add(new GURPS.Die({ sides : sides }));
+	dice.add(new GURPS.DieValue());
 
         var value = dice.cast();
         
-        expect(value).toBeGreaterThan(0);
-        expect(value).toBeLessThan(sides + 1);
+	expect(value).toBeBetween(1, 6);
     });
 
     it("should be create with a factory", function(){
@@ -73,8 +89,7 @@ describe("Dice", function(){
 	var dice = builder.amount(2).sides(6).build();
 
         var value = dice.cast();
-        
-        expect(value).toBeGreaterThan(1);
-        expect(value).toBeLessThan(13);
+
+        expect(value).toBeBetween(2, 12);
     });
 });
