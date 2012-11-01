@@ -1,13 +1,32 @@
 (function($, _, Backbone, GURPS){
     var Die = Backbone.Model.extend({
-        defaults : { sides : 6, random : Math.random },
+        defaults : { sides : 6, random : Math.random, multiplier : 1, basis : 0 },
         
         sides : function(){
             return this.get("sides");
         },
+
+	multiply : function(multiplier){
+	    return new Die({ 
+		sides : this.sides(), 
+		random : this.get("random"), 
+		multiplier : multiplier,
+		basis : this.get("basis")
+	    });
+	},
+        
+	basis : function(basis){
+	    return new Die({ 
+		sides : this.sides(), 
+		random : this.get("random"), 
+		multiplier : this.get("multiplier"),
+		basis : basis
+	    });
+	},
         
         cast : function(){
-	    var result = Math.floor((this.get("random")() * this.sides()) + 1);
+	    var face = Math.floor((this.get("random")() * this.sides()) + 1)
+	    var result = this.get("multiplier") * face + this.get("basis");
 	    this.trigger("cast", result);
 	    return result;
         }

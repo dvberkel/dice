@@ -28,6 +28,24 @@ describe("A Die", function(){
         expect(value).toBeGreaterThan(0);
         expect(value).toBeLessThan(die.sides() + 1);
     });
+    
+    it("should be able to multiply with a given range", function(){
+        var die = (new GURPS.Die()).multiply(10);
+
+        var value = die.cast();
+        
+        expect(value).toBeGreaterThan(10 * 1 - 1);
+        expect(value).toBeLessThan(10 * die.sides() + 1);
+    });
+
+    it("should be able to be shifted with a basis", function(){
+        var die = (new GURPS.Die()).basis(3);
+
+        var value = die.cast();
+        
+        expect(value).toBeGreaterThan(3);
+        expect(value).toBeLessThan(die.sides() + 1 + 3);
+    });
 });
 
 describe("Dice", function(){
