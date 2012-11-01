@@ -13,37 +13,8 @@
         }
     });
 
-    var DieValue = Backbone.Model.extend({
-        defaults : { multiplier : 1, basis : 0 },
-
-	initialize : function(){
-	    if (!this.has("die")) {
-		this.set("die", new Die());
-	    }
-	},
-	
-	multiply : function(multiplier){
-	    this.set("multiplier", multiplier);
-
-	    return this;
-	},
-	
-	basis : function(basis){
-	    this.set("basis", basis);
-
-	    return this;
-	},
-	
-	cast : function(){
-	    var face = this.get("die").cast();
-	    var result = this.get("multiplier") * face + this.get("basis");
-	    return result;
-	    
-	}
-    });
-
     var Dice = Backbone.Collection.extend({
-	model : DieValue,
+	model : Die,
 
 	cast : function(){
 	    var result = 0;
@@ -77,8 +48,40 @@
 	};
     }
 
+
+    var DiceValue = Backbone.Model.extend({
+        defaults : { multiplier : 1, basis : 0 },
+
+	initialize : function(){
+	    if (!this.has("dice")) {
+		var dice = new DiceBuilder().amount(1).sides(6).build();
+		this.set("dice", dice);
+	    }
+	},
+	
+	multiply : function(multiplier){
+	    this.set("multiplier", multiplier);
+
+	    return this;
+	},
+	
+	basis : function(basis){
+	    this.set("basis", basis);
+
+	    return this;
+	},
+	
+	cast : function(){
+	    var face = this.get("dice").cast();
+	    var result = this.get("multiplier") * face + this.get("basis");
+	    this.trigger("cast", result);
+	    return result;
+	    
+	}
+    });
+
     GURPS.Die = Die;
-    GURPS.DieValue = DieValue;
     GURPS.Dice = Dice;
     GURPS.DiceBuilder = DiceBuilder;
+    GURPS.DiceValue = DiceValue;
 })(jQuery, _, Backbone, GURPS);
