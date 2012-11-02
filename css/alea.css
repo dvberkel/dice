@@ -1,0 +1,14 @@
+input {
+    border-style : solid;
+    border-width : 1px;
+}
+
+input.invalid {
+    border-color : red;
+    background-color: rgba(255,0,0,0.5);
+}
+
+input.valid {
+    border-color : green;
+    background-color: rgba(0,255,0,0.5);
+}

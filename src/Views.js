@@ -14,6 +14,7 @@
 
     var DescriptionView = Backbone.View.extend({
 	initialize : function(){
+	    this.model.on("change:description", this.render, this);
 	    this.render();
 	},
 	
@@ -25,12 +26,16 @@
 	},
 
 	input : function(){
-	    if (! this._input) {
-		var $input = $("<input type='text'/>");
-		$input.appendTo(this.$el);
-		this._input = $input;
+	    var self = this;
+	    if (! self._input) {
+		var $input = $("<input id='description' type='text'/>");
+		$input.keyup(function(){
+		    self.model.set("description", $input.val());
+		});
+		$input.appendTo(self.$el);
+		self._input = $input;
 	    }
-	    return this._input;
+	    return self._input;
 	}
     });
 
@@ -41,8 +46,11 @@
 	
 	render : function(){
 	    var $button = this.button();
-	    $button.removeClass();
-	    $button.addClass(this.model.isValid() ? "valid" : "invalid");
+	    if (this.model.isValid()) {
+		$button.removeAttr("disabled");
+	    } else {
+		$button.attr("disabled", "disabled");
+	    }
 	},
 
 	button : function(){
