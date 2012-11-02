@@ -7,7 +7,6 @@
 	render : function(){
 	    var $body = $('body');
  	    new DescriptionView({ model : this.model, el : $body });
- 	    new ThrowView({ model : this.model, el : $body });
  	    new ResultView({ model : this.model, el : $body });
 	}
     });
@@ -32,6 +31,9 @@
 		$input.keyup(function(){
 		    self.model.set("description", $input.val());
 		});
+		$input.keypress(function(e){
+		    if (e.which == 13) self.model.cast();
+		});
 		$input.appendTo(self.$el);
 		self._input = $input;
 	    }
@@ -39,42 +41,18 @@
 	}
     });
 
-    var ThrowView = Backbone.View.extend({
-	initialize : function(){
-	    this.model.on("change:description", this.render, this);
-	    this.render();
-	},
-	
-	render : function(){
-	    var $button = this.button();
-	    if (this.model.isValid()) {
-		$button.removeAttr("disabled");
-	    } else {
-		$button.attr("disabled", "disabled");
-	    }
-	},
-
-	button : function(){
-	    var self = this;
-	    if (! self._button) {
-		var $button = $("<button>Throw</button>");
-		$button.click(function(){
-		    self.model.cast();
-		});
-		$button.appendTo(self.$el);
-		self._button = $button;
-	    }
-	    return self._button;
-	}
-    });
-
     var ResultView = Backbone.View.extend({
 	options : { last : "_" },
 
 	initialize : function(){
+	    this.model.on("change:description", this.clear, this);
 	    this.model.on("change:description", this.render, this);
 	    this.model.on("cast", this.cast, this);
 	    this.render();
+	},
+
+	clear : function(){
+	    this.options.last = "_";
 	},
 	
 	render : function(){
