@@ -18,6 +18,12 @@
 
 	isValid : function(){
 	    return this.has("dice");
+	},
+
+	cast : function(){
+	    if (this.has('dice')) {
+		this.trigger("cast", this.get("dice").cast());
+	    }
 	}
     });
 

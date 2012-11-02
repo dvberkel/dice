@@ -41,6 +41,7 @@
 
     var ThrowView = Backbone.View.extend({
 	initialize : function(){
+	    this.model.on("change:description", this.render, this);
 	    this.render();
 	},
 	
@@ -54,20 +55,25 @@
 	},
 
 	button : function(){
-	    if (! this._button) {
+	    var self = this;
+	    if (! self._button) {
 		var $button = $("<button>Throw</button>");
 		$button.click(function(){
-		    console.log("clicked");
+		    self.model.cast();
 		});
-		$button.appendTo(this.$el);
-		this._button = $button;
+		$button.appendTo(self.$el);
+		self._button = $button;
 	    }
-	    return this._button;
+	    return self._button;
 	}
     });
 
     var ResultView = Backbone.View.extend({
+	options : { last : "_" },
+
 	initialize : function(){
+	    this.model.on("change:description", this.render, this);
+	    this.model.on("cast", this.cast, this);
 	    this.render();
 	},
 	
@@ -75,7 +81,7 @@
 	    var $span = this.span();
 	    if (this.model.isValid()) {
 		$span.show();
-		$span.text(37);
+		$span.text(this.options.last);
 	    } else {
 		$span.hide();
 	    }
@@ -83,7 +89,7 @@
 
 	span : function(){
 	    if (! this._span) {
-		var $span = $("<span>_</span>");
+		var $span = $("<span class='result'>_</span>");
 		$span.click(function(){
 		    console.log("clicked");
 		});
@@ -91,6 +97,11 @@
 		this._span = $span;
 	    }
 	    return this._span;
+	},
+
+	cast : function(value) {
+	    this.options.last = value;
+	    this.render();
 	}
     });
 

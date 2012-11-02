@@ -12,3 +12,7 @@ input.valid {
     border-color : green;
     background-color: rgba(0,255,0,0.5);
 }
+
+span.result {
+    font-family: "Lucida Console", Monaco, monospace
+}
