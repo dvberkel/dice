@@ -1,18 +1,23 @@
+input, span.result {
+    font-family: "Lucida Console", Monaco, monospace;
+    font-size: 15px;
+}
+
 input {
-    border-style : solid;
-    border-width : 1px;
+    border-style: solid;
+    border-width: 1px;
 }
 
 input.invalid {
-    border-color : red;
+    border-color: red;
     background-color: rgba(255,0,0,0.5);
 }
 
 input.valid {
-    border-color : green;
+    border-color: green;
     background-color: rgba(0,255,0,0.5);
 }
 
 span.result {
-    font-family: "Lucida Console", Monaco, monospace
+    font-family: "Lucida Console", Monaco, monospace;
 }

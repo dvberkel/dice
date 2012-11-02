@@ -12,6 +12,8 @@
     });
 
     var DescriptionView = Backbone.View.extend({
+	options : { offset : 1 },
+
 	initialize : function(){
 	    this.model.on("change:description", this.render, this);
 	    this.render();
@@ -19,7 +21,9 @@
 	
 	render : function(){
 	    var $input = this.input();
-	    $input.attr("value", this.model.get("description"));
+	    var description = this.model.get("description");
+	    $input.attr("value", description);
+	    $input.attr("size", description.length + this.options.offset);
 	    $input.removeClass();
 	    $input.addClass(this.model.isValid() ? "valid" : "invalid");
 	},
