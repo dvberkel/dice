@@ -46,4 +46,12 @@ describe("A Parser", function(){
 	
 	expect(value).toBeBetween(4,10);
     });
+
+    it("should return a offsetable value in both directions", function(){
+    	var dice = GURPS.Parser.parse("1d6-2");
+
+	var value = dice.cast();
+	
+	expect(value).toBeBetween(-1,4);
+    });
 });

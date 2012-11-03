@@ -134,7 +134,8 @@ GURPS.Parser = (function(){
         "number": parse_number,
         "dice": parse_dice,
         "offset": parse_offset,
-        "empty_offset": parse_empty_offset
+        "empty_offset": parse_empty_offset,
+        "delta": parse_delta
       };
       
       if (startRule !== undefined) {
@@ -372,15 +373,7 @@ GURPS.Parser = (function(){
         
         pos0 = pos;
         pos1 = pos;
-        if (input.charCodeAt(pos) === 43) {
-          result0 = "+";
-          pos++;
-        } else {
-          result0 = null;
-          if (reportFailures === 0) {
-            matchFailed("\"+\"");
-          }
-        }
+        result0 = parse_delta();
         if (result0 !== null) {
           result1 = parse_number();
           if (result1 !== null) {
@@ -394,7 +387,7 @@ GURPS.Parser = (function(){
           pos = pos1;
         }
         if (result0 !== null) {
-          result0 = (function(offset, offset) { return offset; })(pos0, result0[1]);
+          result0 = (function(offset, multiplier, offset) { return multiplier * offset; })(pos0, result0[0], result0[1]);
         }
         if (result0 === null) {
           pos = pos0;
@@ -416,6 +409,47 @@ GURPS.Parser = (function(){
         }
         if (result0 === null) {
           pos = pos0;
+        }
+        return result0;
+      }
+      
+      function parse_delta() {
+        var result0;
+        var pos0;
+        
+        pos0 = pos;
+        if (input.charCodeAt(pos) === 43) {
+          result0 = "+";
+          pos++;
+        } else {
+          result0 = null;
+          if (reportFailures === 0) {
+            matchFailed("\"+\"");
+          }
+        }
+        if (result0 !== null) {
+          result0 = (function(offset) { return +1; })(pos0);
+        }
+        if (result0 === null) {
+          pos = pos0;
+        }
+        if (result0 === null) {
+          pos0 = pos;
+          if (input.charCodeAt(pos) === 45) {
+            result0 = "-";
+            pos++;
+          } else {
+            result0 = null;
+            if (reportFailures === 0) {
+              matchFailed("\"-\"");
+            }
+          }
+          if (result0 !== null) {
+            result0 = (function(offset) { return -1; })(pos0);
+          }
+          if (result0 === null) {
+            pos = pos0;
+          }
         }
         return result0;
       }

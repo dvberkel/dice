@@ -12,6 +12,24 @@ Frameworks
 * [Backbone][1] as MVC-framework.
 * [pegjs][2] as parser generator framework.
 * [grunt][3] as build tool.
+* [npm][4] as a dependency managment system.
+
+Getting started
+---------------
+
+In order to download all the dependencies execute
+
+    npm install
+
+If the `die.peg` grammar has changed the following command
+creates `js/die.js`.
+
+    ./node_modules/.bin/pegjs -e GURPS.Parser grammar/die.peg src/Parser.js 
+
+The next commands concatenated and minifies source files
+
+    ./node_modules/.bin/grunt concat
+    ./node_modules/.bin/grunt min
 
 [1]: http://backbonejs.org/
 [2]: http://pegjs.majda.cz/
