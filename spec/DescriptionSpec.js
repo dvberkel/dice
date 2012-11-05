@@ -1,15 +1,15 @@
 describe("Description", function(){
     it("should have a default dice value", function(){
-	var description = new GURPS.Description();
+        var description = new GURPS.Description();
 
-	expect(description.isValid()).toBeTruthy();
+        expect(description.isValid()).toBeTruthy();
     });
 
     it("should detect invalid descriptions", function(){
-	var description = new GURPS.Description();
+        var description = new GURPS.Description();
 
-	description.set("description", "bla");
+        description.set("description", "bla");
 
-	expect(description.isValid()).toBeFalsy();
+        expect(description.isValid()).toBeFalsy();
     });
 });
