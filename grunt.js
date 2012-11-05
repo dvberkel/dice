@@ -1,7 +1,7 @@
 module.exports = function(grunt){
     grunt.initConfig({
         lint: {
-            all: ["spec/*.js", "src/*.js", "js/alea.js"]
+            all: ["spec/*.js", "src/Description.js", "src/Die.js", "src/GURPS.js", "src/Views.js", "js/alea.js"]
         },
         concat: {
             dist: {
