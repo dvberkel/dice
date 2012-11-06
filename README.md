@@ -22,9 +22,9 @@ In order to download all the dependencies execute
     npm install
 
 If the `die.peg` grammar has changed the following command
-creates `js/die.js`.
+creates `grammar/Parser.js`.
 
-    ./node_modules/.bin/pegjs -e GURPS.Parser grammar/die.peg src/Parser.js 
+    ./node_modules/.bin/grunt generate
 
 The next commands concatenated and minifies source files
 
