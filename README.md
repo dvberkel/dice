@@ -31,6 +31,14 @@ The next commands concatenated and minifies source files
     ./node_modules/.bin/grunt concat
     ./node_modules/.bin/grunt min
 
+Packaging
+---------
+
+    zip -r ~/Desktop/dice.zip index.html js/* lib/* css/* image/* manifest.json
+
+creates a package that can be uploaded to the Chrome Developer
+Dashboard.
+
 [1]: http://backbonejs.org/
 [2]: http://pegjs.majda.cz/
 [3]: http://gruntjs.com/
