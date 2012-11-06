@@ -493,4 +493,4 @@ GURPS.Parser = (function(){
   result.SyntaxError.prototype = Error.prototype;
   
   return result;
-})();
+})()
