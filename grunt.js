@@ -21,12 +21,12 @@ module.exports = function(grunt){
     });
 
     grunt.registerTask("generate", function(){
-        var grammar = fs.readFileSync("grammar/die.peg", "utf8");
+        var inputFile = "grammar/die.peg";
+        var outputFile = "grammar/Parser.js";
+        var exportVar = "GURPS.Parser";
+        var grammar = fs.readFileSync(inputFile, "utf8");
         var parser = PEG.buildParser(grammar);
-        fs.writeFileSync("grammar/Parser.js", "GURPS.Parser = " + parser.toSource(), "utf8", function(error){
-            if (error) throw error;
-            console.log("saved");
-        });
+        fs.writeFileSync(outputFile, exportVar + " = " + parser.toSource(), "utf8");
     });
 
     grunt.registerTask("default", 'lint');
