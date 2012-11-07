@@ -36,7 +36,7 @@
                     self.model.set("description", $input.val());
                 });
                 $input.keypress(function(e){
-                    if (e.which == 13) self.model.cast();
+                    if (e.which === 13) { self.model.cast(); }
                 });
                 $input.appendTo(self.$el);
                 self._input = $input;

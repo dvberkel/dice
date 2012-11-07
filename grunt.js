@@ -6,6 +6,34 @@ module.exports = function(grunt){
         lint: {
             all: ["spec/*.js", "src/*.js", "js/alea.js"]
         },
+        jshint: {
+            options: {
+                bitwise: true,
+                curly: true,
+                eqeqeq: true,
+                forin: true,
+                immed: true,
+                latedef: true,
+                newcap: true,
+                noarg: true,
+                noempty: true,
+                undef: true,
+                unused: true,
+                trailing: true
+            },
+            globals: {
+                jQuery: false,
+                $: false,
+                _: false,
+                Backbone: false,
+                GURPS: true,
+                describe: false,
+                it: false,
+                expect: false,
+                beforeEach: false,
+                console: false
+            }
+        },
         concat: {
             dist: {
                 src: ["src/GURPS.js", "src/Die.js", "grammar/Parser.js", "src/Description.js", "src/Views.js" ],
