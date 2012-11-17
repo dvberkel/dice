@@ -57,5 +57,5 @@ module.exports = function(grunt){
         fs.writeFileSync(outputFile, exportVar + " = " + parser.toSource() + ";", "utf8");
     });
 
-    grunt.registerTask("default", 'lint');
+    grunt.registerTask("default", 'lint generate concat min');
 }
