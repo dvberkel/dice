@@ -11,13 +11,16 @@ number
     = digits:[0-9]+ { return parseInt(digits.join(''), 10); }
 
 dice 
-    = amount:number 'd' sides:number { 
+    = amount:number 'd' sides:positive_number { 
 	var dice = (new GURPS.DiceBuilder())
 	    .amount(amount)
 	    .sides(sides)
 	    .build();
 	return new GURPS.DiceValue({ dice : dice }); 
     }
+
+positive_number 
+    = digit:[1-9] digits:[0-9]* { return parseInt(digit + digits.join(''), 10); }
 
 offset 
     = multiplier:delta offset:number { return multiplier * offset; }
