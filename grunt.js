@@ -54,7 +54,7 @@ module.exports = function(grunt){
         var exportVar = "GURPS.Parser";
         var grammar = fs.readFileSync(inputFile, "utf8");
         var parser = PEG.buildParser(grammar);
-        fs.writeFileSync(outputFile, exportVar + " = " + parser.toSource(), "utf8");
+        fs.writeFileSync(outputFile, exportVar + " = " + parser.toSource() + ";", "utf8");
     });
 
     grunt.registerTask("default", 'lint');
