@@ -31,6 +31,10 @@ The next commands concatenated and minifies source files
     ./node_modules/.bin/grunt concat
     ./node_modules/.bin/grunt min
 
+The default grunt task performs these tasks in one go.
+
+    ./node_modules/.bin/grunt
+
 Packaging
 ---------
 
