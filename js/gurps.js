@@ -1,86 +1,85 @@
 GURPS = {
-    "version" : "0.0.0"
+    "version" : "0.0.2"
 };
 (function($, _, Backbone, GURPS){
     var Die = Backbone.Model.extend({
         defaults : { sides : 6, random : Math.random },
-        
+
         sides : function(){
             return this.get("sides");
         },
-        
+
         cast : function(){
-	    var result = Math.floor((this.get("random")() * this.sides()) + 1)
-	    this.trigger("cast", result);
-	    return result;
+            var result = Math.floor((this.get("random")() * this.sides()) + 1);
+            this.trigger("cast", result);
+            return result;
         }
     });
 
     var Dice = Backbone.Collection.extend({
-	model : Die,
+        model : Die,
 
-	cast : function(){
-	    var result = 0;
-	    this.each(function(die){
-		result += die.cast();
-	    });
-	    return result;
-	}
+        cast : function(){
+            var result = 0;
+            this.each(function(die){
+                result += die.cast();
+            });
+            return result;
+        }
     });
 
     var DiceBuilder = function(){
-	var _amount = 1;
-	var _sides = 6;
+        var _amount = 1;
+        var _sides = 6;
 
-	this.amount = function(amount){
-	    _amount = amount;
-	    return this;
-	};
+        this.amount = function(amount){
+            _amount = amount;
+            return this;
+        };
 
-	this.sides = function(sides) {
-	    _sides = sides;
-	    return this;
-	};
+        this.sides = function(sides) {
+            _sides = sides;
+            return this;
+        };
 
-	this.build = function(){
-	    var dice = new Dice();
-	    for (var index = 0; index < _amount; index++) {
-		dice.add({ die : new Die({ sides : _sides }) });
-	    }
-	    return dice;
-	};
-    }
-
+        this.build = function(){
+            var dice = new Dice();
+            for (var index = 0; index < _amount; index++) {
+                dice.add(new Die({ sides : _sides }));
+            }
+            return dice;
+        };
+    };
 
     var DiceValue = Backbone.Model.extend({
         defaults : { multiplier : 1, basis : 0 },
 
-	initialize : function(){
-	    if (!this.has("dice")) {
-		var dice = new DiceBuilder().amount(1).sides(6).build();
-		this.set("dice", dice);
-	    }
-	},
-	
-	multiply : function(multiplier){
-	    this.set("multiplier", multiplier);
+        initialize : function(){
+            if (!this.has("dice")) {
+                var dice = new DiceBuilder().amount(1).sides(6).build();
+                this.set("dice", dice);
+            }
+        },
 
-	    return this;
-	},
-	
-	basis : function(basis){
-	    this.set("basis", basis);
+        multiply : function(multiplier){
+            this.set("multiplier", multiplier);
 
-	    return this;
-	},
-	
-	cast : function(){
-	    var face = this.get("dice").cast();
-	    var result = this.get("multiplier") * face + this.get("basis");
-	    this.trigger("cast", result);
-	    return result;
-	    
-	}
+            return this;
+        },
+
+        basis : function(basis){
+            this.set("basis", basis);
+
+            return this;
+        },
+
+        cast : function(){
+            var face = this.get("dice").cast();
+            var result = this.get("multiplier") * face + this.get("basis");
+            this.trigger("cast", result);
+            return result;
+
+        }
     });
 
     GURPS.Die = Die;
@@ -133,6 +132,7 @@ GURPS.Parser = (function(){
         "empty_factor": parse_empty_factor,
         "number": parse_number,
         "dice": parse_dice,
+        "positive_number": parse_positive_number,
         "offset": parse_offset,
         "empty_offset": parse_empty_offset,
         "delta": parse_delta
@@ -337,7 +337,7 @@ GURPS.Parser = (function(){
             }
           }
           if (result1 !== null) {
-            result2 = parse_number();
+            result2 = parse_positive_number();
             if (result2 !== null) {
               result0 = [result0, result1, result2];
             } else {
@@ -360,6 +360,63 @@ GURPS.Parser = (function(){
         	    .build();
         	return new GURPS.DiceValue({ dice : dice }); 
             })(pos0, result0[0], result0[2]);
+        }
+        if (result0 === null) {
+          pos = pos0;
+        }
+        return result0;
+      }
+      
+      function parse_positive_number() {
+        var result0, result1, result2;
+        var pos0, pos1;
+        
+        pos0 = pos;
+        pos1 = pos;
+        if (/^[1-9]/.test(input.charAt(pos))) {
+          result0 = input.charAt(pos);
+          pos++;
+        } else {
+          result0 = null;
+          if (reportFailures === 0) {
+            matchFailed("[1-9]");
+          }
+        }
+        if (result0 !== null) {
+          result1 = [];
+          if (/^[0-9]/.test(input.charAt(pos))) {
+            result2 = input.charAt(pos);
+            pos++;
+          } else {
+            result2 = null;
+            if (reportFailures === 0) {
+              matchFailed("[0-9]");
+            }
+          }
+          while (result2 !== null) {
+            result1.push(result2);
+            if (/^[0-9]/.test(input.charAt(pos))) {
+              result2 = input.charAt(pos);
+              pos++;
+            } else {
+              result2 = null;
+              if (reportFailures === 0) {
+                matchFailed("[0-9]");
+              }
+            }
+          }
+          if (result1 !== null) {
+            result0 = [result0, result1];
+          } else {
+            result0 = null;
+            pos = pos1;
+          }
+        } else {
+          result0 = null;
+          pos = pos1;
+        }
+        if (result0 !== null) {
+          result0 = (function(offset, digit, digits) { return parseInt(digit + digits.join(''), 10); })(pos0, result0[0], result0[1]);
         }
         if (result0 === null) {
           pos = pos0;
@@ -585,125 +642,124 @@ GURPS.Parser = (function(){
   
   return result;
 })();
-
 (function(_, Backbone, GURPS){
     var Description = Backbone.Model.extend({
-	defaults : { description : "3d6" },
+        defaults : { description : "3d6" },
 
-	initialize : function(){
-	    this.on("change:description", this.process, this);
-	    this.process();
-	},
+        initialize : function(){
+            this.on("change:description", this.process, this);
+            this.process();
+        },
 
-	process : function(){
-	    try {
-		var dice = GURPS.Parser.parse(this.get("description"));
-		this.set("dice", dice);
-	    } catch(error) {
-		this.unset("dice");
-	    }
-	},
+        process : function(){
+            try {
+                var dice = GURPS.Parser.parse(this.get("description"));
+                this.set("dice", dice);
+            } catch(error) {
+                this.unset("dice");
+            }
+        },
 
-	isValid : function(){
-	    return this.has("dice");
-	},
+        isValid : function(){
+            return this.has("dice");
+        },
 
-	cast : function(){
-	    if (this.has('dice')) {
-		this.trigger("cast", this.get("dice").cast());
-	    }
-	}
+        cast : function(){
+            if (this.has('dice')) {
+                this.trigger("cast", this.get("dice").cast());
+            }
+        }
     });
 
     GURPS.Description = Description;
 })(_, Backbone, GURPS);
 (function($, _, Backbone, GURPS){
     var MainView = Backbone.View.extend({
-	initialize : function(){
-	    this.render();
-	},
-	
-	render : function(){
-	    var $body = $('body');
- 	    new DescriptionView({ model : this.model, el : $body });
- 	    new ResultView({ model : this.model, el : $body });
-	}
+        initialize : function(){
+            this.render();
+        },
+
+        render : function(){
+            var $body = $('body');
+            new DescriptionView({ model : this.model, el : $body });
+            new ResultView({ model : this.model, el : $body });
+        }
     });
 
     var DescriptionView = Backbone.View.extend({
-	options : { offset : 1 },
+        options : { offset : 1 },
 
-	initialize : function(){
-	    this.model.on("change:description", this.render, this);
-	    this.render();
-	},
-	
-	render : function(){
-	    var $input = this.input();
-	    var description = this.model.get("description");
-	    $input.attr("value", description);
-	    $input.attr("size", description.length + this.options.offset);
-	    $input.removeClass();
-	    $input.addClass(this.model.isValid() ? "valid" : "invalid");
+        initialize : function(){
+            this.model.on("change:description", this.render, this);
+            this.render();
 	},
 
-	input : function(){
-	    var self = this;
-	    if (! self._input) {
-		var $input = $("<input id='description' type='text'/>");
-		$input.keyup(function(){
-		    self.model.set("description", $input.val());
-		});
-		$input.keypress(function(e){
-		    if (e.which == 13) self.model.cast();
-		});
-		$input.appendTo(self.$el);
-		self._input = $input;
-	    }
-	    return self._input;
-	}
+        render : function(){
+            var $input = this.input();
+            var description = this.model.get("description");
+            $input.attr("value", description);
+            $input.attr("size", description.length + this.options.offset);
+            $input.removeClass();
+            $input.addClass(this.model.isValid() ? "valid" : "invalid");
+        },
+
+        input : function(){
+            var self = this;
+            if (! self._input) {
+                var $input = $("<input id='description' type='text'/>");
+                $input.keyup(function(){
+                    self.model.set("description", $input.val());
+                });
+                $input.keypress(function(e){
+                    if (e.which === 13) { self.model.cast(); }
+                });
+                $input.appendTo(self.$el);
+                self._input = $input;
+            }
+            return self._input;
+        }
     });
 
     var ResultView = Backbone.View.extend({
-	options : { last : "_" },
+        options : { last : "_" },
 
-	initialize : function(){
-	    this.model.on("change:description", this.clear, this);
-	    this.model.on("change:description", this.render, this);
-	    this.model.on("cast", this.cast, this);
-	    this.render();
-	},
+        initialize : function(){
+            this.model.on("change:description", this.clear, this);
+            this.model.on("change:description", this.render, this);
+            this.model.on("cast", this.cast, this);
+            this.render();
+        },
 
-	clear : function(){
-	    this.options.last = "_";
-	},
-	
-	render : function(){
-	    var $span = this.span();
-	    if (this.model.isValid()) {
-		$span.show();
-		$span.text(this.options.last);
-	    } else {
-		$span.hide();
-	    }
-	},
+        clear : function(){
+            this.options.last = "_";
+        },
 
-	span : function(){
-	    if (! this._span) {
-		var $span = $("<span class='result'>_</span>");
-		$span.click(function(){
-		    console.log("clicked");
-		});
-		$span.appendTo(this.$el);
-		this._span = $span;
-	    }
-	    return this._span;
-	},
+        render : function(){
+            var $span = this.span();
+            if (this.model.isValid()) {
+                $span.show();
+                $span.text(this.options.last);
+            } else {
+                $span.hide();
+            }
+        },
 
-	cast : function(value) {
-	    this.options.last = value;
-	    this.render();
-	}
+        span : function(){
+            if (! this._span) {
+                var $span = $("<span class='result'>_</span>");
+                $span.click(function(){
+                    console.log("clicked");
+                });
+                $span.appendTo(this.$el);
+                this._span = $span;
+            }
+            return this._span;
+        },
+
+        cast : function(value) {
+            this.options.last = value;
+            this.render();
+        }
     });
 
     GURPS.MainView = MainView;

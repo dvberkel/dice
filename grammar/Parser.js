@@ -42,6 +42,7 @@ GURPS.Parser = (function(){
         "empty_factor": parse_empty_factor,
         "number": parse_number,
         "dice": parse_dice,
+        "positive_number": parse_positive_number,
         "offset": parse_offset,
         "empty_offset": parse_empty_offset,
         "delta": parse_delta
@@ -246,7 +247,7 @@ GURPS.Parser = (function(){
             }
           }
           if (result1 !== null) {
-            result2 = parse_number();
+            result2 = parse_positive_number();
             if (result2 !== null) {
               result0 = [result0, result1, result2];
             } else {
@@ -269,6 +270,63 @@ GURPS.Parser = (function(){
         	    .build();
         	return new GURPS.DiceValue({ dice : dice }); 
             })(pos0, result0[0], result0[2]);
+        }
+        if (result0 === null) {
+          pos = pos0;
+        }
+        return result0;
+      }
+      
+      function parse_positive_number() {
+        var result0, result1, result2;
+        var pos0, pos1;
+        
+        pos0 = pos;
+        pos1 = pos;
+        if (/^[1-9]/.test(input.charAt(pos))) {
+          result0 = input.charAt(pos);
+          pos++;
+        } else {
+          result0 = null;
+          if (reportFailures === 0) {
+            matchFailed("[1-9]");
+          }
+        }
+        if (result0 !== null) {
+          result1 = [];
+          if (/^[0-9]/.test(input.charAt(pos))) {
+            result2 = input.charAt(pos);
+            pos++;
+          } else {
+            result2 = null;
+            if (reportFailures === 0) {
+              matchFailed("[0-9]");
+            }
+          }
+          while (result2 !== null) {
+            result1.push(result2);
+            if (/^[0-9]/.test(input.charAt(pos))) {
+              result2 = input.charAt(pos);
+              pos++;
+            } else {
+              result2 = null;
+              if (reportFailures === 0) {
+                matchFailed("[0-9]");
+              }
+            }
+          }
+          if (result1 !== null) {
+            result0 = [result0, result1];
+          } else {
+            result0 = null;
+            pos = pos1;
+          }
+        } else {
+          result0 = null;
+          pos = pos1;
+        }
+        if (result0 !== null) {
+          result0 = (function(offset, digit, digits) { return parseInt(digit + digits.join(''), 10); })(pos0, result0[0], result0[1]);
         }
         if (result0 === null) {
           pos = pos0;
@@ -493,4 +551,4 @@ GURPS.Parser = (function(){
   result.SyntaxError.prototype = Error.prototype;
   
   return result;
-})()
+})();
