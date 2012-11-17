@@ -42,7 +42,7 @@
         this.build = function(){
             var dice = new Dice();
             for (var index = 0; index < _amount; index++) {
-                dice.add({ die : new Die({ sides : _sides }) });
+                dice.add(new Die({ sides : _sides }));
             }
             return dice;
         };

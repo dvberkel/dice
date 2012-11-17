@@ -38,15 +38,6 @@ describe("Dice", function(){
         expect(dice.size()).toBe(1);
     });
 
-    it("should be able to be cast", function(){
-        var dice = new GURPS.Dice();
-        dice.add(new GURPS.Die());
-
-        var value = dice.cast();
-
-        expect(value).toBeBetween(1, 6);
-    });
-
     it("should be create with a factory", function(){
         var builder = new GURPS.DiceBuilder();
         var dice = builder.amount(2).sides(6).build();
