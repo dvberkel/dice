@@ -68,9 +68,11 @@ module.exports = function(grunt){
 	    }
 	},
 	peg: {
-	    grammar: "grammar/die.peg",
-	    exportVar: "GURPS.Parser",
-	    outputFile: "grammar/Parser.js"
+	    die : {
+		grammar: "grammar/die.peg",
+		exportVar: "GURPS.Parser",
+		outputFile: "grammar/Parser.js"
+	    }
 	},
     });
 
@@ -84,13 +86,13 @@ module.exports = function(grunt){
 	
     });
 
-    grunt.registerTask("peg", "generate Parser.js from a peg grammar", function(){
-        var grammar = grunt.file.read(grunt.config("peg.grammar"));
-        var exportVar = grunt.config("peg.exportVar");
-        var outputFile = grunt.config("peg.outputFile");
+    grunt.registerMultiTask("peg", "generate Parser.js from a peg grammar", function(){
+        var grammar = grunt.file.read(this.data.grammar);
+        var exportVar = this.data.exportVar;
+        var outputFile = this.data.outputFile;
         var parser = PEG.buildParser(grammar);
         grunt.file.write(outputFile, exportVar + " = " + parser.toSource() + ";");
     });
 
-    grunt.registerTask("default", 'lint generate:namespace generate_parser concat min generate:manifest compress');
+    grunt.registerTask("default", 'lint generate:namespace peg:die concat min generate:manifest compress');
 }
