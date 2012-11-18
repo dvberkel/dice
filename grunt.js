@@ -83,5 +83,5 @@ module.exports = function(grunt){
         grunt.file.write(outputFile, exportVar + " = " + parser.toSource() + ";");
     });
 
-    grunt.registerTask("default", 'lint generate_grammar concat min compress');
+    grunt.registerTask("default", 'lint generate_namespace generate_grammar concat min compress');
 }
