@@ -66,7 +66,7 @@ module.exports = function(grunt){
 	}
     });
 
-    grunt.registerTask("generate_namespace", function(){
+    grunt.registerTask("generate_namespace", "generate the GURPS.js from a template", function(){
 	var data = grunt.file.readJSON("package.json");
 	var templateFile = grunt.config("generate_namespace.templateFile");
 	var outputFile = grunt.config("generate_namespace.outputFile");
@@ -75,7 +75,7 @@ module.exports = function(grunt){
 	grunt.file.write(outputFile, grunt.template.process(template, data));
     });
 
-    grunt.registerTask("generate_parser", function(){
+    grunt.registerTask("generate_parser", "generate Parser.js from a peg grammar", function(){
         var outputFile = grunt.config("generate_parser.outputFile");
         var exportVar = grunt.config("generate_parser.exportVar");
         var grammar = grunt.file.read(grunt.config("generate_parser.inputFile"));
