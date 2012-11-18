@@ -2,6 +2,8 @@ var fs = require("fs");
 var PEG = require("pegjs");
 
 module.exports = function(grunt){
+    grunt.loadNpmTasks('grunt-contrib-compress');
+
     grunt.initConfig({
         lint: {
             all: ["spec/*.js", "src/*.js", "js/alea.js"]
@@ -45,7 +47,14 @@ module.exports = function(grunt){
                 src : ["js/gurps.js"],
                 dest: "js/gurps.min.js"
             }
-        }
+        },
+	compress: {
+	    zip: {
+		files: {
+		    "dice.zip": ["index.html", "js/*", "lib/*", "css/*", "image/*", "manifest.json"]
+		}
+	    }
+	}
     });
 
     grunt.registerTask("generate", function(){
@@ -57,5 +66,5 @@ module.exports = function(grunt){
         fs.writeFileSync(outputFile, exportVar + " = " + parser.toSource() + ";", "utf8");
     });
 
-    grunt.registerTask("default", 'lint generate concat min');
+    grunt.registerTask("default", 'lint generate concat min compress');
 }
