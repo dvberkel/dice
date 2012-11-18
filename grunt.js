@@ -57,7 +57,7 @@ module.exports = function(grunt){
 	}
     });
 
-    grunt.registerTask("generate", function(){
+    grunt.registerTask("generate_grammar", function(){
         var inputFile = "grammar/die.peg";
         var outputFile = "grammar/Parser.js";
         var exportVar = "GURPS.Parser";
@@ -66,5 +66,5 @@ module.exports = function(grunt){
         fs.writeFileSync(outputFile, exportVar + " = " + parser.toSource() + ";", "utf8");
     });
 
-    grunt.registerTask("default", 'lint generate concat min compress');
+    grunt.registerTask("default", 'lint generate_grammar concat min compress');
 }
