@@ -67,10 +67,10 @@ module.exports = function(grunt){
 		outputFile : "manifest.json"
 	    }
 	},
-	generate_parser: {
-	    inputFile: "grammar/die.peg",
-	    outputFile: "grammar/Parser.js",
-	    exportVar: "GURPS.Parser"
+	peg: {
+	    grammar: "grammar/die.peg",
+	    exportVar: "GURPS.Parser",
+	    outputFile: "grammar/Parser.js"
 	},
     });
 
@@ -84,10 +84,10 @@ module.exports = function(grunt){
 	
     });
 
-    grunt.registerTask("generate_parser", "generate Parser.js from a peg grammar", function(){
-        var outputFile = grunt.config("generate_parser.outputFile");
-        var exportVar = grunt.config("generate_parser.exportVar");
-        var grammar = grunt.file.read(grunt.config("generate_parser.inputFile"));
+    grunt.registerTask("peg", "generate Parser.js from a peg grammar", function(){
+        var grammar = grunt.file.read(grunt.config("peg.grammar"));
+        var exportVar = grunt.config("peg.exportVar");
+        var outputFile = grunt.config("peg.outputFile");
         var parser = PEG.buildParser(grammar);
         grunt.file.write(outputFile, exportVar + " = " + parser.toSource() + ";");
     });
