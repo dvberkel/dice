@@ -58,6 +58,11 @@ module.exports = function(grunt){
 	generate_namespace: {
 	    templateFile : "template/GURPS.tmpl",
 	    outputFile : "src/GURPS.js"
+	},
+	generate_parser: {
+	    inputFile: "grammar/die.peg",
+	    outputFile: "grammar/Parser.js",
+	    exportVar: "GURPS.Parser"
 	}
     });
 
@@ -70,13 +75,12 @@ module.exports = function(grunt){
 	grunt.file.write(outputFile, grunt.template.process(template, data));
     });
 
-    grunt.registerTask("generate_grammar", function(){
-        var inputFile = "grammar/die.peg";
-        var outputFile = "grammar/Parser.js";
-        var exportVar = "GURPS.Parser";
-        var grammar = fs.readFileSync(inputFile, "utf8");
+    grunt.registerTask("generate_parser", function(){
+        var outputFile = grunt.config("generate_parser.outputFile");
+        var exportVar = grunt.config("generate_parser.exportVar");
+        var grammar = grunt.file.read(grunt.config("generate_parser.inputFile"));
         var parser = PEG.buildParser(grammar);
-        fs.writeFileSync(outputFile, exportVar + " = " + parser.toSource() + ";", "utf8");
+        grunt.file.write(outputFile, exportVar + " = " + parser.toSource() + ";");
     });
 
     grunt.registerTask("default", 'lint generate_grammar concat min compress');
