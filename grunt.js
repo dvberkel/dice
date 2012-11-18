@@ -54,7 +54,20 @@ module.exports = function(grunt){
 		    "dice.zip": ["index.html", "js/*", "lib/*", "css/*", "image/*", "manifest.json"]
 		}
 	    }
+	},
+	generate_namespace: {
+	    templateFile : "template/GURPS.tmpl",
+	    outputFile : "src/GURPS.js"
 	}
+    });
+
+    grunt.registerTask("generate_namespace", function(){
+	var data = grunt.file.readJSON("package.json");
+	var templateFile = grunt.config("generate_namespace.templateFile");
+	var outputFile = grunt.config("generate_namespace.outputFile");
+	
+	var template = grunt.file.read(templateFile);
+	grunt.file.write(outputFile, grunt.template.process(template, data));
     });
 
     grunt.registerTask("generate_grammar", function(){
