@@ -55,28 +55,33 @@ module.exports = function(grunt){
 		}
 	    }
 	},
-	generate_namespace: {
-	    templateFile : "template/GURPS.tmpl",
-	    outputFile : "src/GURPS.js"
+	generate : {
+	    namespace: {
+		data : grunt.file.readJSON("package.json"),
+		templateFile : "template/GURPS.tmpl",
+		outputFile : "src/GURPS.js"
+	    },
+	    manifest: {
+		data : grunt.file.readJSON("package.json"),
+		templateFile : "template/manifest.tmpl",
+		outputFile : "manifest.json"
+	    }
 	},
 	generate_parser: {
 	    inputFile: "grammar/die.peg",
 	    outputFile: "grammar/Parser.js",
 	    exportVar: "GURPS.Parser"
 	},
-	generate_manifest: {
-	    templateFile : "template/manifest.tmpl",
-	    outputFile : "manifest.json"
-	}
     });
 
-    grunt.registerTask("generate_namespace", "generate the GURPS.js from a template", function(){
-	var data = grunt.file.readJSON("package.json");
-	var templateFile = grunt.config("generate_namespace.templateFile");
-	var outputFile = grunt.config("generate_namespace.outputFile");
+    grunt.registerMultiTask("generate", "generate a file from a template", function(){
+	var data = this.data.data;
+	var templateFile = this.data.templateFile;
+	var outputFile = this.data.outputFile;
 	
 	var template = grunt.file.read(templateFile);
 	grunt.file.write(outputFile, grunt.template.process(template, data));
+	
     });
 
     grunt.registerTask("generate_parser", "generate Parser.js from a peg grammar", function(){
@@ -87,14 +92,5 @@ module.exports = function(grunt){
         grunt.file.write(outputFile, exportVar + " = " + parser.toSource() + ";");
     });
 
-    grunt.registerTask("generate_manifest", "generate the manifest.json from a template", function(){
-	var data = grunt.file.readJSON("package.json");
-	var templateFile = grunt.config("generate_manifest.templateFile");
-	var outputFile = grunt.config("generate_manifest.outputFile");
-	
-	var template = grunt.file.read(templateFile);
-	grunt.file.write(outputFile, grunt.template.process(template, data));
-    });
-
-    grunt.registerTask("default", 'lint generate_namespace generate_grammar concat min generate_manifest compress');
+    grunt.registerTask("default", 'lint generate:namespace generate_parser concat min generate:manifest compress');
 }
