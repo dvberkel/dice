@@ -96,5 +96,5 @@ module.exports = function(grunt){
 	grunt.file.write(outputFile, grunt.template.process(template, data));
     });
 
-    grunt.registerTask("default", 'lint generate_namespace generate_grammar concat min compress');
+    grunt.registerTask("default", 'lint generate_namespace generate_grammar concat min generate_manifest compress');
 }
