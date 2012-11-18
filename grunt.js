@@ -63,6 +63,10 @@ module.exports = function(grunt){
 	    inputFile: "grammar/die.peg",
 	    outputFile: "grammar/Parser.js",
 	    exportVar: "GURPS.Parser"
+	},
+	generate_manifest: {
+	    templateFile : "template/manifest.tmpl",
+	    outputFile : "manifest.json"
 	}
     });
 
@@ -81,6 +85,15 @@ module.exports = function(grunt){
         var grammar = grunt.file.read(grunt.config("generate_parser.inputFile"));
         var parser = PEG.buildParser(grammar);
         grunt.file.write(outputFile, exportVar + " = " + parser.toSource() + ";");
+    });
+
+    grunt.registerTask("generate_manifest", "generate the manifest.json from a template", function(){
+	var data = grunt.file.readJSON("package.json");
+	var templateFile = grunt.config("generate_manifest.templateFile");
+	var outputFile = grunt.config("generate_manifest.outputFile");
+	
+	var template = grunt.file.read(templateFile);
+	grunt.file.write(outputFile, grunt.template.process(template, data));
     });
 
     grunt.registerTask("default", 'lint generate_namespace generate_grammar concat min compress');
