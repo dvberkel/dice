@@ -3,7 +3,7 @@
     "version" : "0.0.2",
     "description" : "A Chrome extension to throw dice in the browser",
     "devDependencies" : {
-	"pegjs" : "*",
+	"grunt-peg" : "*",
 	"grunt" : "*",
 	"grunt-contrib-compress" : "*"
     }

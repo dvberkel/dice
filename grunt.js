@@ -3,6 +3,7 @@ var PEG = require("pegjs");
 
 module.exports = function(grunt){
     grunt.loadNpmTasks('grunt-contrib-compress');
+    grunt.loadNpmTasks('grunt-peg');
 
     grunt.initConfig({
         lint: {
@@ -84,14 +85,6 @@ module.exports = function(grunt){
 	var template = grunt.file.read(templateFile);
 	grunt.file.write(outputFile, grunt.template.process(template, data));
 	
-    });
-
-    grunt.registerMultiTask("peg", "generate Parser.js from a peg grammar", function(){
-        var grammar = grunt.file.read(this.data.grammar);
-        var exportVar = this.data.exportVar;
-        var outputFile = this.data.outputFile;
-        var parser = PEG.buildParser(grammar);
-        grunt.file.write(outputFile, exportVar + " = " + parser.toSource() + ";");
     });
 
     grunt.registerTask("default", 'lint generate:namespace peg:die concat min generate:manifest compress');
