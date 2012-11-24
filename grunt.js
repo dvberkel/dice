@@ -39,7 +39,14 @@ module.exports = function(grunt){
         },
         concat: {
             dist: {
-                src: ["src/GURPS.js", "src/Die.js", "grammar/Parser.js", "src/Description.js", "src/Views.js" ],
+                src: [
+		    "src/GURPS.js", 
+		    "src/Die.js", 
+		    "grammar/Parser.js", 
+		    "src/Description.js", 
+		    "src/Views.js",
+		    "src/Reporter.js"
+		],
                 dest: "js/gurps.js"
             }
         },
