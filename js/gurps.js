@@ -655,10 +655,20 @@ GURPS.Parser = (function(){
         process : function(){
             try {
                 var dice = GURPS.Parser.parse(this.get("description"));
-                this.set("dice", dice);
+                this.monitor(dice);
             } catch(error) {
                 this.unset("dice");
             }
+        },
+
+        monitor : function(dice) {
+            if (this.has("reporter")) {
+                var reporter = this.get("reporter");
+                dice.get("dice").each(function(die){
+                    reporter.monitor(die);
+                });
+            }
+            this.set("dice", dice);
         },
 
         isValid : function(){
@@ -674,6 +684,7 @@ GURPS.Parser = (function(){
 
     GURPS.Description = Description;
 })(_, Backbone, GURPS);
+
 (function($, _, Backbone, GURPS){
     var MainView = Backbone.View.extend({
         initialize : function(){
