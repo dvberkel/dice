@@ -34,7 +34,8 @@ module.exports = function(grunt){
                 it: false,
                 expect: false,
                 beforeEach: false,
-                console: false
+                console: false,
+                openDatabase: false
             }
         },
         concat: {
