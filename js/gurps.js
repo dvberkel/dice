@@ -685,6 +685,33 @@ GURPS.Parser = (function(){
     GURPS.Description = Description;
 })(_, Backbone, GURPS);
 
+(function(GURPS){
+    var db = openDatabase("gurps_dice", "1.0", "results of dice throws", 5 * 1024 * 1024);
+
+    db.transaction(function(tx){
+        tx.executeSql("create table if not exists versions (timestamp, version)");
+        tx.executeSql("create table if not exists results (timestamp, sides, value)");
+    });
+
+    db.transaction(function(tx){
+        tx.executeSql("select version from versions order by version desc", [], function(rtx, result){
+            var n = result.rows.length;
+            if (n === 0) {
+                tx.executeSql(
+                    "insert into versions (timestamp, version) values (?, ?)",
+                    [(new Date()).getTime(), "1.0"]
+                );
+            }
+        });
+    });
+
+    GURPS.database = {
+        'connection' : function(){
+            return db;
+        }
+    };
+})(GURPS);
+
 (function($, _, Backbone, GURPS){
     var MainView = Backbone.View.extend({
         initialize : function(){
@@ -695,6 +722,7 @@ GURPS.Parser = (function(){
             var $body = $('body');
             new DescriptionView({ model : this.model, el : $body });
             new ResultView({ model : this.model, el : $body });
+            new SummaryView({ el : $body });
         }
     });
 
@@ -704,7 +732,7 @@ GURPS.Parser = (function(){
         initialize : function(){
             this.model.on("change:description", this.render, this);
             this.render();
-	},
+        },
 
         render : function(){
             var $input = this.input();
@@ -774,35 +802,47 @@ GURPS.Parser = (function(){
         }
     });
 
+    var SummaryView = Backbone.View.extend({
+        template : _.template("<option value='<%= sides %>'><%= sides %></option>"),
+
+        initialize : function(){
+            this.render();
+        },
+
+        render : function(){
+            var selection = this.selection();
+            selection.val('6');
+        },
+
+        selection : function(){
+            if (! this._selection) {
+                var selection = $("<select class='sides'></selection");
+                selection.appendTo(this.$el);
+                this._selection = selection;
+            }
+            this.populate(this._selection);
+            return this._selection;
+        },
+
+        populate : function(selection){
+            var template = this.template;
+            selection.empty();
+            var connection = GURPS.database.connection();
+            connection.transaction(function(tx){
+                tx.executeSql("select distinct(sides) from results", [], function(rtx, result){
+                    var rows = result.rows;
+                    for (var index = 0; index < rows.length; index++) {
+                        var row = rows.item(index);
+                        selection.append(template(row));
+                    }
+
+                });
+            });
+        }
+    });
+
     GURPS.MainView = MainView;
 })($, _, Backbone, GURPS);
-
-(function(GURPS){
-    var db = openDatabase("gurps_dice", "1.0", "results of dice throws", 5 * 1024 * 1024);
-
-    db.transaction(function(tx){
-        tx.executeSql("create table if not exists versions (timestamp, version)");
-        tx.executeSql("create table if not exists results (timestamp, sides, value)");
-    });
-
-    db.transaction(function(tx){
-        tx.executeSql("select version from versions order by version desc", [], function(rtx, result){
-            var n = result.rows.length;
-            if (n === 0) {
-                tx.executeSql(
-                    "insert into versions (timestamp, version) values (?, ?)",
-                    [(new Date()).getTime(), "1.0"]
-                );
-            }
-        });
-    });
-
-    GURPS.database = {
-        'connection' : function(){
-            return db;
-        }
-    };
-})(GURPS);
 
 (function(_, GURPS){
     var Reporter = function(options){

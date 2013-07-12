@@ -45,8 +45,8 @@ module.exports = function(grunt){
 		    "src/Die.js",
 		    "grammar/Parser.js",
 		    "src/Description.js",
-		    "src/Views.js",
 		    "src/Database.js",
+		    "src/Views.js",
 		    "src/Reporter.js"
 		],
                 dest: "js/gurps.js"

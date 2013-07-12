@@ -8,6 +8,7 @@
             var $body = $('body');
             new DescriptionView({ model : this.model, el : $body });
             new ResultView({ model : this.model, el : $body });
+            new SummaryView({ el : $body });
         }
     });
 
@@ -17,7 +18,7 @@
         initialize : function(){
             this.model.on("change:description", this.render, this);
             this.render();
-	},
+        },
 
         render : function(){
             var $input = this.input();
@@ -84,6 +85,45 @@
         cast : function(value) {
             this.options.last = value;
             this.render();
+        }
+    });
+
+    var SummaryView = Backbone.View.extend({
+        template : _.template("<option value='<%= sides %>'><%= sides %></option>"),
+
+        initialize : function(){
+            this.render();
+        },
+
+        render : function(){
+            var selection = this.selection();
+            selection.val('6');
+        },
+
+        selection : function(){
+            if (! this._selection) {
+                var selection = $("<select class='sides'></selection");
+                selection.appendTo(this.$el);
+                this._selection = selection;
+            }
+            this.populate(this._selection);
+            return this._selection;
+        },
+
+        populate : function(selection){
+            var template = this.template;
+            selection.empty();
+            var connection = GURPS.database.connection();
+            connection.transaction(function(tx){
+                tx.executeSql("select distinct(sides) from results", [], function(rtx, result){
+                    var rows = result.rows;
+                    for (var index = 0; index < rows.length; index++) {
+                        var row = rows.item(index);
+                        selection.append(template(row));
+                    }
+
+                });
+            });
         }
     });
 
