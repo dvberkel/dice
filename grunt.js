@@ -41,11 +41,12 @@ module.exports = function(grunt){
         concat: {
             dist: {
                 src: [
-		    "src/GURPS.js", 
-		    "src/Die.js", 
-		    "grammar/Parser.js", 
-		    "src/Description.js", 
+		    "src/GURPS.js",
+		    "src/Die.js",
+		    "grammar/Parser.js",
+		    "src/Description.js",
 		    "src/Views.js",
+		    "src/Database.js",
 		    "src/Reporter.js"
 		],
                 dest: "js/gurps.js"
@@ -89,10 +90,10 @@ module.exports = function(grunt){
 	var data = this.data.data;
 	var templateFile = this.data.templateFile;
 	var outputFile = this.data.outputFile;
-	
+
 	var template = grunt.file.read(templateFile);
 	grunt.file.write(outputFile, grunt.template.process(template, data));
-	
+
     });
 
     grunt.registerTask("default", 'lint generate:namespace peg:die concat min generate:manifest compress');
