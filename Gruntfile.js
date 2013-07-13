@@ -90,9 +90,11 @@ module.exports = function(grunt){
         },
         peg: {
             die : {
-                grammar: "grammar/die.peg",
-                exportVar: "GURPS.Parser",
-                outputFile: "grammar/Parser.js"
+                src: 'grammar/die.peg',
+                dest: 'grammar/Parser.js',
+		options: {
+                    exportVar: 'GURPS.Parser'
+		}
             }
         },
     });
@@ -115,7 +117,7 @@ module.exports = function(grunt){
 
     });
 
-    grunt.registerTask("default", [
+    grunt.registerTask('default', [
         'jshint',
         'generate:namespace',
         'peg:die',
