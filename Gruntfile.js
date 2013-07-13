@@ -8,7 +8,7 @@ module.exports = function(grunt){
             '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
             ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
         lint: {
-            all: ["spec/*.js", "src/*.js", "js/alea.js"]
+            all: ['spec/*.js', 'src/*.js', 'js/alea.js']
         },
         jshint: {
             options: {
@@ -39,15 +39,15 @@ module.exports = function(grunt){
             },
             dist: {
                 src: [
-                    "src/GURPS.js",
-                    "src/Die.js",
-                    "grammar/Parser.js",
-                    "src/Description.js",
-                    "src/Database.js",
-                    "src/Views.js",
-                    "src/Reporter.js"
+                    'src/GURPS.js',
+                    'src/Die.js',
+                    'grammar/Parser.js',
+                    'src/Description.js',
+                    'src/Database.js',
+                    'src/Views.js',
+                    'src/Reporter.js'
                 ],
-                dest: "js/gurps.js"
+                dest: 'js/gurps.js'
             }
         },
         uglify: {
@@ -55,8 +55,8 @@ module.exports = function(grunt){
                 banner: '<%= banner %>'
             },
             dist: {
-                src : "js/gurps.js",
-                dest: "js/gurps.min.js"
+                src : 'js/gurps.js',
+                dest: 'js/gurps.min.js'
             }
         },
         watch: {
@@ -72,7 +72,7 @@ module.exports = function(grunt){
         compress: {
             zip: {
                 files: {
-                    "dice.zip": ["index.html", "js/*", "lib/*", "css/*", "image/*", "manifest.json"]
+                    'dice.zip': ['index.html', 'js/*', 'lib/*', 'css/*', 'image/*', 'manifest.json']
                 }
             }
         },
