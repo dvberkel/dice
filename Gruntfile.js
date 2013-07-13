@@ -78,23 +78,27 @@ module.exports = function(grunt){
         },
         generate : {
             namespace: {
-                data : grunt.file.readJSON("package.json"),
-                templateFile : "template/GURPS.tmpl",
-                outputFile : "src/GURPS.js"
+                src: 'template/GURPS.tmpl',
+                dest: 'src/GURPS.js',
+                options : {
+                    data : grunt.file.readJSON('package.json')
+                }
             },
             manifest: {
-                data : grunt.file.readJSON("package.json"),
-                templateFile : "template/manifest.tmpl",
-                outputFile : "manifest.json"
+                src: 'template/manifest.tmpl',
+                dest: 'manifest.json',
+                options: {
+                    data : grunt.file.readJSON('package.json')
+                }
             }
         },
         peg: {
             die : {
                 src: 'grammar/die.peg',
                 dest: 'grammar/Parser.js',
-		options: {
+                options: {
                     exportVar: 'GURPS.Parser'
-		}
+                }
             }
         },
     });
@@ -107,14 +111,28 @@ module.exports = function(grunt){
     grunt.loadNpmTasks('grunt-peg');
 
 
-    grunt.registerMultiTask("generate", "generate a file from a template", function(){
-        var data = this.data.data;
-        var templateFile = this.data.templateFile;
-        var outputFile = this.data.outputFile;
+    grunt.registerMultiTask('generate', 'generate a file from a template', function(){
+        var files = this.files;
+        var options = this.options({});
 
-        var template = grunt.file.read(templateFile);
-        grunt.file.write(outputFile, grunt.template.process(template, data));
+        files.forEach(function(f){
+            var src = f.src.filter(function(filepath){
+                if(!grunt.file.exists(filepath)){
+                    grunt.log.warn('Source file "' + filepath + '" not found.');
+                    return false;
+                } else {
+                    return true;
+                }
+            });
 
+            var template = src.map(function(filepath){
+                return grunt.file.read(filepath);
+            }).join(grunt.util.linefeed);
+
+            grunt.file.write(f.dest, grunt.template.process(template, options.data));
+
+            grunt.log.writeln('Generated "' + f.dest + '"');
+        });
     });
 
     grunt.registerTask('default', [
