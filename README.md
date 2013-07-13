@@ -46,7 +46,7 @@ Packaging
 ---------
 
 ```shell
-grunt compress
+grunt compress:package
 ```
 
 creates a package that can be uploaded to the Chrome Developer

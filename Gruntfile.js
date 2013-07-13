@@ -70,9 +70,11 @@ module.exports = function(grunt){
             }
         },
         compress: {
-            zip: {
-                files: {
-                    'dice.zip': ['index.html', 'js/*', 'lib/*', 'css/*', 'image/*', 'manifest.json']
+            'package': {
+                src : ['index.html', 'js/*', 'lib/*', 'css/*', 'image/*', 'manifest.json'],
+                options: {
+                    archive: 'dice.zip',
+                    mode: 'zip'
                 }
             }
         },
