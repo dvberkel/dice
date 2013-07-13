@@ -1,3 +1,4 @@
+/*global openDatabase: false, GURPS:true*/
 (function(GURPS){
     var db = openDatabase("gurps_dice", "1.0", "results of dice throws", 5 * 1024 * 1024);
 

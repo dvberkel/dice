@@ -1,3 +1,4 @@
+/*global _:false, GURPS:true*/
 (function(_, GURPS){
     var Reporter = function(options){
         var stores = options.stores || [];

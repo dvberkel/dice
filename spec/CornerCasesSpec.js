@@ -1,3 +1,4 @@
+/*global describe:false, it:false, expect:false, GURPS:false*/
 describe("Corner cases for", function(){
     describe("a Die", function(){
         it("could have 1 side", function(){

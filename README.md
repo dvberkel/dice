@@ -9,13 +9,20 @@ used to specify the required roll of the dice.
 Frameworks
 ----------
 
-* [Backbone][1] as MVC-framework.
-* [pegjs][2] as parser generator framework.
-* [grunt][3] as build tool.
-* [npm][4] as a dependency managment system.
+* [Backbone][] as MVC-framework.
+* [pegjs][] as parser generator framework.
+* [grunt][] as build tool.
+* [npm][] as a dependency managment system.
 
 Getting started
 ---------------
+
+This project relies on [grunt][] to automate various tasks. It needs a
+globally installed `grunt` executable which can be installed with
+
+```shell
+npm install -g grunt-cli
+```
 
 In order to download all the dependencies execute
 
@@ -24,26 +31,37 @@ In order to download all the dependencies execute
 If the `die.peg` grammar has changed the following command
 creates `grammar/Parser.js`.
 
-    ./node_modules/.bin/grunt generate
+```shell
+grunt peg:die
+```
 
 The next commands concatenated and minifies source files
 
-    ./node_modules/.bin/grunt concat
-    ./node_modules/.bin/grunt min
-
-The default grunt task performs these tasks in one go.
-
-    ./node_modules/.bin/grunt
+```shell
+grunt concat
+grunt uglify
+```
 
 Packaging
 ---------
 
-    zip -r ~/Desktop/dice.zip index.html js/* lib/* css/* image/* manifest.json
+```shell
+grunt compress
+```
 
 creates a package that can be uploaded to the Chrome Developer
 Dashboard.
 
-[1]: http://backbonejs.org/
-[2]: http://pegjs.majda.cz/
-[3]: http://gruntjs.com/
-[4]: https://npmjs.org/
+Default
+-------
+
+The default grunt task performs these tasks in one go.
+
+```shell
+grunt
+```
+
+[Backbone]: http://backbonejs.org/
+[pegjs]: http://pegjs.majda.cz/
+[grunt]: http://gruntjs.com/
+[npm]: https://npmjs.org/

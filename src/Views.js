@@ -1,3 +1,4 @@
+/*global console:false, jQuery:false, _:false, Backbone:false, GURPS:true*/
 (function($, _, Backbone, GURPS){
     var MainView = Backbone.View.extend({
         initialize : function(){
@@ -128,4 +129,4 @@
     });
 
     GURPS.MainView = MainView;
-})($, _, Backbone, GURPS);
+})(jQuery, _, Backbone, GURPS);

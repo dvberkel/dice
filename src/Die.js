@@ -1,3 +1,4 @@
+/*global jQuery:false, _:false, Backbone:false, GURPS:true*/
 (function($, _, Backbone, GURPS){
     var Die = Backbone.Model.extend({
         defaults : { sides : 6, random : Math.random },

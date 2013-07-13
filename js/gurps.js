@@ -1,5 +1,7 @@
+/*! dice - v0.0.3 - 2013-07-13
+* Copyright (c) 2013 ; Licensed  */
 GURPS = {
-    "version" : "0.0.3"
+    "version" : ""
 };
 
 (function($, _, Backbone, GURPS){
@@ -842,7 +844,7 @@ GURPS.Parser = (function(){
     });
 
     GURPS.MainView = MainView;
-})($, _, Backbone, GURPS);
+})(jQuery, _, Backbone, GURPS);
 
 (function(_, GURPS){
     var Reporter = function(options){

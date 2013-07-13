@@ -1,3 +1,4 @@
+/*global describe:false, it:false, expect:false, GURPS:false*/
 describe("Description", function(){
     it("should have a default dice value", function(){
         var description = new GURPS.Description();

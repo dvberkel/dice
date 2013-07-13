@@ -1,3 +1,4 @@
+/*global describe:false, it:false, expect:false, GURPS:false*/
 describe("A Reporter", function(){
     var InvokedStore = function(){
         this.invoked = false;

@@ -1,3 +1,4 @@
+/*global beforeEach:false*/
 beforeEach(function() {
     this.addMatchers({
         toBeBetween : function(low, high) {

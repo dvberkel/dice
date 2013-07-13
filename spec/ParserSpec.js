@@ -1,3 +1,4 @@
+/*global describe:false, it:false, expect:false, GURPS:false*/
 describe("A Parser", function(){
     it("should be defined", function(){
         expect(GURPS.Parser).toBeDefined();

@@ -1,3 +1,4 @@
+/*global GURPS:true*/
 GURPS = {
-    "version" : "0.0.3"
+    "version" : ""
 };

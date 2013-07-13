@@ -1,3 +1,4 @@
+/*global describe:false, it:false, expect:false, GURPS:false*/
 describe("A Die", function(){
     it("should have default number of sides", function(){
         var die = new GURPS.Die();

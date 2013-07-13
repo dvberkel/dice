@@ -1,3 +1,4 @@
+/*global _:false, Backbone:false, GURPS:true*/
 (function(_, Backbone, GURPS){
     var Description = Backbone.Model.extend({
         defaults : { description : "3d6" },
